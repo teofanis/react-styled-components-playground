@@ -1,8 +1,10 @@
-import React from "react";
+import React, {useState} from "react";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import LightTheme from '../themes/light';
+import DarkTheme from '../themes/dark';
 
 const GlobalStyle = createGlobalStyle`
   body{
@@ -14,14 +16,12 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const theme ={ 
-  primaryColor: '#f8049c',
-  secondaryColor: '#fdd54f'
-};
-
 function App() {
+  const [theme, setTheme] = useState(LightTheme);
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={{...theme, setTheme: () => {
+			setTheme(s => s.id === 'light' ? DarkTheme : LightTheme);
+		}}}>
       <GlobalStyle />
       <BrowserRouter>
         <Switch>

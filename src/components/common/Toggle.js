@@ -24,9 +24,11 @@ const Notch = styled.div`
 
 `;
 
-export function Toggle({isActive}){
+export function Toggle({isActive, onToggle}){
+
+
     return (
-        <ToggleWrapper>
+        <ToggleWrapper onClick={onToggle}>
             <Notch isActive={isActive}></Notch>
         </ToggleWrapper>
     )
