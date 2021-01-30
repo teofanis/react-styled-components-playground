@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { PageLayout, Input, PasswordInput, Button, Spinner } from "../common";
 import styled from "styled-components";
+import axios from 'axios';
 import { Link } from "react-router-dom";
-import axios from "axios";
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = 'http://localhost';
@@ -32,8 +32,8 @@ const Form = styled.form`
 
 let timeout;
 
-export default function Login() {
-  const [formFields, setFormFields] = useState({ username: "", password: "" });
+export default function Register() {
+  const [formFields, setFormFields] = useState({ name: "", email: "", password: "", password_confirmation: "" });
   const [loading, setLoading] = useState(false);
 
   function handleInputChange(e) {
@@ -47,16 +47,16 @@ export default function Login() {
   function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
-    axios.get('/sanctum/csrf-cookie').then(response => {
-      axios.post('/login', {
-          email: formFields.username,
-          password: formFields.password,
-      }).then(response => {
-        console.log(response);
-      }).catch(error => {
-        console.log(error);
+      axios.get('/sanctum/csrf-cookie').then(response => {
+          axios.post('/register', {
+              name: formFields.name,
+              email: formFields.email,
+              password: formFields.password,
+              password_confirmation: formFields.password_confirmation
+          }).then(response => {
+            console.log(response);
+          });
       });
-  });
     timeout = setTimeout(() => {
       setLoading(false);
     }, 2000);
@@ -72,35 +72,46 @@ export default function Login() {
 
   return (
     <PageLayout>
-      <h1>Login</h1>
+      <h1>Register</h1>
       <Form onSubmit={handleSubmit}>
         {loading ? <Spinner/> :
         <>
         <span>
-          Login if you have an account
+          Register
         </span>
           <Input
-            value={formFields.username}
+            value={formFields.name}
             onChange={handleInputChange}
-            name="username"
-            placeholder="Username"
+            name="name"
+            placeholder="Name"
+            />
+            <Input
+            value={formFields.email}
+            onChange={handleInputChange}
+            name="email"
+            placeholder="email"
           />
           <PasswordInput
             value={formFields.password}
             onChange={handleInputChange}
             name="password"
+                      />
+            <PasswordInput
+            value={formFields.password_confirmation}
+            onChange={handleInputChange}
+            name="password_confirmation"
           />
         </>
         }
         <Button large type="submit" disabled={loading}>
-          {loading ? "Loading..." : "Login"}
+          {loading ? "Loading..." : "Register"}
         </Button>
         {!loading && (
           <>
             <div className="alt-text">or</div>
-            <Link to="/register" style={{ textDecoration: 'none' }}>
+            <Link to="/login" style={{ textDecoration: 'none' }}>
               <Button  secondary type="button">
-                Register
+                Login
               </Button>
             </Link>
           </>

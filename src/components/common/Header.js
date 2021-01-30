@@ -91,6 +91,9 @@ export function Header() {
         <StyledLink to="/login" isActive={pathname === "/login"}>
           Login
         </StyledLink>
+        <StyledLink to="/register" isActive={pathname === "/register"}>
+          Register
+        </StyledLink>
         <Toggle isActive={id === 'dark'} onToggle={setTheme}></Toggle>
       </Menu>
     </HeaderWrapper>
